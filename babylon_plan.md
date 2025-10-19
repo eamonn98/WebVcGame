@@ -63,3 +63,11 @@ timeline
 2. Integrate Babylon.js with a minimal scene, verifying hot reload, inspector access, and shader compilation under Bun.
 3. Draft architecture notes (scene/state flow, component responsibilities) and log open questions for art and gameplay direction.
 4. Establish CI workflow executing `bun install`, `bun test`, and `bun run build`, publishing artifacts to a staging host for review.
+
+## Current Architecture Snapshot
+- `src/app/` hosts `Application.ts` (system orchestration) and `GameLoop.ts` (render loop wrapper).
+- `src/core/` includes `ServiceLocator.ts`, `SceneManager.ts`, and event bus primitives.
+- `src/scenes/` defines `BaseScene.ts`, concrete scenes (`LoadingScene.ts`, `TitleScene.ts`, `overworld/OverworldScene.ts`, `combat/CombatScene.ts`) and `SceneRegistry.ts`.
+- `src/systems/` contains subsystem stubs for audio, rendering, gameplay, world, and UI management.
+- `src/input/` provides `InputManager.ts` and default bindings.
+- `src/config/` exposes `AppConfig.ts` defaults; `src/data/WorldState.ts` seeds world metadata.
