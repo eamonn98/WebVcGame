@@ -18,6 +18,7 @@ export class InputManager {
   private readonly actionStates = new Map<InputAction, ActionState>()
   private keyDownListener?: (event: KeyboardEvent) => void
   private keyUpListener?: (event: KeyboardEvent) => void
+  private movementAxis: { x: number; y: number } = { x: 0, y: 0 }
 
   public constructor(events: EventBus<GameEvent>) {
     this.events = events
@@ -38,6 +39,7 @@ export class InputManager {
     window.addEventListener('keyup', this.keyUpListener)
 
     // TODO: Register gamepad/touch listeners once implementations are ready.
+    this.recalculateMovementAxis()
   }
 
   /**
@@ -53,6 +55,8 @@ export class InputManager {
       state.released = false
       this.actionStates.set(action, state)
     }
+
+    this.recalculateMovementAxis()
   }
 
   /**
@@ -75,6 +79,13 @@ export class InputManager {
     }
 
     this.actionStates.clear()
+  }
+
+  /**
+   * Returns the normalized movement axis derived from the current input state.
+   */
+  public getMovementAxis(): { x: number; y: number } {
+    return { ...this.movementAxis }
   }
 
   private handleKeyEvent(event: KeyboardEvent, isDown: boolean): void {
@@ -107,5 +118,23 @@ export class InputManager {
     return (Object.keys(this.bindings) as InputAction[]).find((action) =>
       this.bindings[action].keys.includes(code),
     ) ?? null
+  }
+
+  private recalculateMovementAxis(): void {
+    const up = this.actionStates.get('moveUp')?.held ? 1 : 0
+    const down = this.actionStates.get('moveDown')?.held ? 1 : 0
+    const left = this.actionStates.get('moveLeft')?.held ? 1 : 0
+    const right = this.actionStates.get('moveRight')?.held ? 1 : 0
+
+    let x = right - left
+    let y = down - up
+
+    const length = Math.hypot(x, y)
+    if (length > 0) {
+      x /= length
+      y /= length
+    }
+
+    this.movementAxis = { x, y }
   }
 }

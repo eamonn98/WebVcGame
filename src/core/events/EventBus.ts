@@ -50,4 +50,11 @@ export class EventBus<TEvent> {
   public clear(): void {
     this.listeners.clear()
   }
+
+  /**
+   * Removes all handlers for a given event type.
+   */
+  public clearType(eventType: string): void {
+    this.listeners.delete(eventType)
+  }
 }
