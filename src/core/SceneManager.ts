@@ -27,6 +27,11 @@ export class SceneManager {
         void this.transitionTo(next)
       }
     })
+
+    // Forward all events to the active scene's onEvent handler
+    this.events.subscribeAll((event) => {
+      this.activeScene?.onEvent(event)
+    })
   }
 
   /**
@@ -59,6 +64,14 @@ export class SceneManager {
     this.activeScene = nextScene
     this.activeSceneKey = target
     this.events.publish({ type: 'scene:activated', payload: target })
+
+    // Update debug state if available
+    try {
+      const debug = ServiceLocator.resolve<{ setActiveScene: (k: string) => void }>('debugState')
+      debug.setActiveScene(target)
+    } catch {
+      // ignore if not registered
+    }
   }
 
   /**

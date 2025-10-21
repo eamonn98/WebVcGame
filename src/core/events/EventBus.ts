@@ -5,6 +5,7 @@ export type EventHandler<TEvent> = (event: TEvent) => void
  */
 export class EventBus<TEvent> {
   private readonly listeners = new Map<string, Set<EventHandler<TEvent>>>()
+  private readonly anyListeners = new Set<EventHandler<TEvent>>()
 
   /**
    * Registers a listener for the specified event type.
@@ -13,6 +14,13 @@ export class EventBus<TEvent> {
     const handlers = this.listeners.get(eventType) ?? new Set<EventHandler<TEvent>>()
     handlers.add(handler)
     this.listeners.set(eventType, handlers)
+  }
+
+  /**
+   * Registers a listener for all events.
+   */
+  public subscribeAll(handler: EventHandler<TEvent>): void {
+    this.anyListeners.add(handler)
   }
 
   /**
@@ -31,16 +39,27 @@ export class EventBus<TEvent> {
   }
 
   /**
+   * Removes a previously registered any-listener.
+   */
+  public unsubscribeAll(handler: EventHandler<TEvent>): void {
+    this.anyListeners.delete(handler)
+  }
+
+  /**
    * Publishes an event payload to all subscribers of its type.
    */
   public publish(event: TEvent & { type: string }): void {
     const handlers = this.listeners.get(event.type)
-    if (!handlers) {
-      return
+    if (handlers) {
+      for (const handler of handlers) {
+        handler(event)
+      }
     }
 
-    for (const handler of handlers) {
-      handler(event)
+    if (this.anyListeners.size > 0) {
+      for (const handler of this.anyListeners) {
+        handler(event)
+      }
     }
   }
 
@@ -49,6 +68,7 @@ export class EventBus<TEvent> {
    */
   public clear(): void {
     this.listeners.clear()
+    this.anyListeners.clear()
   }
 
   /**
