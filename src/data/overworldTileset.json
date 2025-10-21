@@ -1,0 +1,127 @@
+{
+  "texture": "/assets/tilesets/overworld.png",
+  "tileSize": 16,
+  "columns": 18,
+  "rows": 13,
+  "categories": [
+    {
+      "id": "grass_center",
+      "label": "Grass Center",
+      "tiles": [
+        { "column": 1, "row": 0, "weight": 3, "edges": { "north": "grass", "south": "grass", "east": "grass", "west": "grass" } },
+        { "column": 1, "row": 1, "weight": 3, "edges": { "north": "grass", "south": "grass", "east": "grass", "west": "grass" } }
+      ],
+      "tags": ["walkable", "grass", "center"]
+    },
+    {
+      "id": "grass_edge",
+      "label": "Grass Edge",
+      "tiles": [
+        { "column": 0, "row": 0, "weight": 2, "edges": { "north": "grass", "south": "dirt", "east": "grass", "west": "dirt" } },
+        { "column": 2, "row": 0, "weight": 2, "edges": { "north": "grass", "south": "dirt", "east": "dirt", "west": "grass" } },
+        { "column": 0, "row": 1, "weight": 2, "edges": { "north": "dirt", "south": "grass", "east": "grass", "west": "dirt" } },
+        { "column": 2, "row": 1, "weight": 2, "edges": { "north": "dirt", "south": "grass", "east": "dirt", "west": "grass" } }
+      ],
+      "tags": ["walkable", "grass", "edge"]
+    },
+    {
+      "id": "grass_corner",
+      "label": "Grass Corner",
+      "tiles": [
+        { "column": 3, "row": 0, "weight": 1, "edges": { "north": "grass", "west": "grass", "south": "dirt", "east": "dirt" } },
+        { "column": 4, "row": 0, "weight": 1, "edges": { "north": "grass", "west": "dirt", "south": "dirt", "east": "grass" } },
+        { "column": 3, "row": 1, "weight": 1, "edges": { "north": "dirt", "west": "grass", "south": "grass", "east": "dirt" } },
+        { "column": 4, "row": 1, "weight": 1, "edges": { "north": "dirt", "west": "dirt", "south": "grass", "east": "grass" } }
+      ],
+      "tags": ["walkable", "grass", "corner"]
+    },
+    {
+      "id": "grass_path",
+      "label": "Grass Path",
+      "tiles": [
+        { "column": 3, "row": 1, "weight": 1, "edges": { "north": "path", "south": "path", "east": "path", "west": "path" } },
+        { "column": 4, "row": 1, "weight": 1, "edges": { "north": "path", "south": "path" } },
+        { "column": 5, "row": 1, "weight": 1, "edges": { "east": "path", "west": "path" } },
+        { "column": 6, "row": 1, "weight": 1, "edges": { "north": "path" } },
+        { "column": 0, "row": 2, "weight": 1, "edges": { "south": "path" } },
+        { "column": 1, "row": 2, "weight": 1, "edges": { "east": "path" } },
+        { "column": 2, "row": 2, "weight": 1, "edges": { "west": "path" } }
+      ],
+      "tags": ["walkable", "path"]
+    },
+    {
+      "id": "water",
+      "label": "Water",
+      "tiles": [
+        { "column": 7, "row": 0, "weight": 2 },
+        { "column": 8, "row": 0, "weight": 2 },
+        { "column": 9, "row": 0, "weight": 2 },
+        { "column": 7, "row": 1, "weight": 2 },
+        { "column": 8, "row": 1, "weight": 2 },
+        { "column": 9, "row": 1, "weight": 2 }
+      ],
+      "tags": ["water", "non_walkable"],
+      "edges": { "default": "water" }
+    },
+    {
+      "id": "sand_shore",
+      "label": "Sand/Shore",
+      "tiles": [
+        { "column": 10, "row": 0, "weight": 1 },
+        { "column": 11, "row": 0, "weight": 1 },
+        { "column": 10, "row": 1, "weight": 1 },
+        { "column": 11, "row": 1, "weight": 1 }
+      ],
+      "tags": ["shore", "transition", "walkable"],
+      "edges": { "default": "shore" }
+    },
+    {
+      "id": "cliff",
+      "label": "Cliff",
+      "tiles": [
+        { "column": 12, "row": 0, "weight": 1 },
+        { "column": 13, "row": 0, "weight": 1 },
+        { "column": 12, "row": 1, "weight": 1 },
+        { "column": 13, "row": 1, "weight": 1 }
+      ],
+      "tags": ["cliff", "non_walkable"],
+      "edges": { "default": "cliff" }
+    },
+    {
+      "id": "foliage",
+      "label": "Foliage",
+      "tiles": [
+        { "column": 14, "row": 0, "weight": 1 },
+        { "column": 15, "row": 0, "weight": 1 },
+        { "column": 14, "row": 1, "weight": 1 }
+      ],
+      "tags": ["obstacle", "non_walkable"],
+      "placement": "decoration"
+    },
+    {
+      "id": "rocks",
+      "label": "Rocks",
+      "tiles": [
+        { "column": 16, "row": 0, "weight": 1 },
+        { "column": 17, "row": 0, "weight": 1 },
+        { "column": 16, "row": 1, "weight": 1 }
+      ],
+      "tags": ["obstacle", "non_walkable"],
+      "placement": "decoration"
+    },
+    {
+      "id": "structure_roof",
+      "label": "Structure Roof",
+      "tiles": [
+        { "column": 12, "row": 3, "weight": 1 },
+        { "column": 13, "row": 3, "weight": 1 },
+        { "column": 14, "row": 3, "weight": 1 },
+        { "column": 12, "row": 4, "weight": 1 },
+        { "column": 13, "row": 4, "weight": 1 },
+        { "column": 14, "row": 4, "weight": 1 }
+      ],
+      "tags": ["structure", "roof"],
+      "placement": "structure"
+    }
+  ]
+}
