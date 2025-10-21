@@ -3,8 +3,10 @@ import { Color4 } from '@babylonjs/core/Maths/math.color'
 import { Vector3 } from '@babylonjs/core/Maths/math.vector'
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera'
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight'
+import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder'
 import { SpriteManager } from '@babylonjs/core/Sprites/spriteManager'
 import { Sprite } from '@babylonjs/core/Sprites/sprite'
+import '@babylonjs/core/Sprites/spriteSceneComponent'
 
 import type { GameEvent } from '../core/events/GameEvent.ts'
 import type { EventBus } from '../core/events/EventBus.ts'
@@ -31,7 +33,7 @@ export class TitleScene extends BaseScene {
   public async create(): Promise<void> {
     this.scene.clearColor = new Color4(0, 0, 0, 1)
 
-    this.camera = new ArcRotateCamera('titleCamera', Math.PI / 2, Math.PI / 3, 5, Vector3.Zero(), this.scene)
+    this.camera = new ArcRotateCamera('titleCamera', Math.PI / 2, Math.PI / 3, 6, Vector3.Zero(), this.scene)
     this.scene.activeCamera = this.camera
     const canvas = this.scene.getEngine().getRenderingCanvas()
     if (canvas) {
@@ -40,10 +42,14 @@ export class TitleScene extends BaseScene {
 
     new HemisphericLight('titleHemiLight', new Vector3(0, 1, 0), this.scene)
 
-    this.spriteManager = new SpriteManager('titleSprites', '/assets/spritesheets/mvc-sprites.png', 1, { width: 64, height: 64 }, this.scene)
+    this.spriteManager = new SpriteManager('titleSprites', '/assets/spritesheets/mvc-sprites.png', 1, { width: 48, height: 48 }, this.scene)
     this.heroSprite = new Sprite('hero', this.spriteManager)
     this.heroSprite.size = 3
     this.heroSprite.position.z = 2
+
+    // Simple ground to guarantee something visible
+    const ground = MeshBuilder.CreateGround('titleGround', { width: 10, height: 10 }, this.scene)
+    ground.position.y = -1
   }
 
   /** @inheritdoc */
