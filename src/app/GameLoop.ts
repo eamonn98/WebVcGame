@@ -36,6 +36,10 @@ export class GameLoop {
       this.lastFrameTime = now
 
       this.application.update(delta)
+      // Skip rendering if no active camera is set (e.g., during scene transitions)
+      if (!this.scene.activeCamera) {
+        return
+      }
       this.scene.render()
     })
   }

@@ -12,6 +12,7 @@ import { WorldManager } from '../systems/world/WorldManager.ts'
 import { GameplayCoordinator } from '../systems/gameplay/GameplayCoordinator.ts'
 import { HudManager } from '../systems/ui/HudManager.ts'
 import { AppConfig } from '../config/AppConfig.ts'
+import { DebugState } from '../debug/DebugState.ts'
 
 /**
  * Coordinates application lifecycle and orchestrates high-level systems.
@@ -25,6 +26,7 @@ export class Application {
   private readonly worldManager: WorldManager
   private readonly gameplayCoordinator: GameplayCoordinator
   private readonly hudManager: HudManager
+  private readonly debugState: DebugState
   private isInitialized = false
 
   /**
@@ -45,10 +47,12 @@ export class Application {
     this.worldManager = new WorldManager(this.eventBus)
     this.gameplayCoordinator = new GameplayCoordinator(this.eventBus)
     this.hudManager = new HudManager(this.eventBus)
+    this.debugState = new DebugState()
 
     ServiceLocator.register('worldManager', this.worldManager)
     ServiceLocator.register('audioManager', this.audioManager)
     ServiceLocator.register('inputManager', this.inputManager)
+    ServiceLocator.register('debugState', this.debugState)
   }
 
   /**
@@ -85,6 +89,7 @@ export class Application {
     this.renderingPipeline.update(deltaTime)
     this.sceneManager.update(deltaTime)
     this.hudManager.update(deltaTime)
+    this.debugState.updateFrameMetrics(deltaTime)
   }
 
   /**
@@ -112,5 +117,9 @@ export class Application {
 
     ServiceLocator.reset()
     this.isInitialized = false
+  }
+
+  public getDebugState(): DebugState {
+    return this.debugState
   }
 }
