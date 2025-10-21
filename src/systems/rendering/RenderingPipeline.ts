@@ -1,7 +1,8 @@
-import { Color4 } from '@babylonjs/core/Maths/math.color'
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline'
-
+import type { Engine } from '@babylonjs/core/Engines/engine'
+import { WebGPUEngine } from '@babylonjs/core/Engines/webgpuEngine'
 import type { Scene } from '@babylonjs/core/scene'
+
 
 import type { EventBus } from '../../core/events/EventBus.ts'
 import type { GameEvent } from '../../core/events/GameEvent.ts'
@@ -28,18 +29,43 @@ export class RenderingPipeline {
   public async initialize(): Promise<void> {
     this.config = ServiceLocator.resolve<AppConfiguration>('config')
 
-    this.scene.clearColor = new Color4(0.02, 0.02, 0.04, 1)
+    const engine = ServiceLocator.resolve<Engine>('engine')
+    const engineName = (engine as unknown as { getClassName?: () => string }).getClassName?.()
+    const isWebGPU = engine instanceof WebGPUEngine || engineName === 'WebGPUEngine'
 
     const { render } = this.config
-    const activeCamera = this.scene.activeCamera
-    if (!activeCamera) {
+    if (isWebGPU) {
+      this.pipeline = null
       return
     }
 
-    this.pipeline = new DefaultRenderingPipeline('defaultPipeline', true, this.scene, [activeCamera])
-    this.pipeline.samples = render.antialias ? 4 : 1
-    this.pipeline.fxaaEnabled = render.antialias
-    this.pipeline.imageProcessingEnabled = true
+    const supportsDefaultPipeline =
+      (DefaultRenderingPipeline as unknown as { IsSupported?: boolean }).IsSupported ?? true
+    if (!supportsDefaultPipeline) {
+      return
+    }
+
+    const setupPipeline = (): void => {
+      const activeCamera = this.scene.activeCamera
+      if (!activeCamera) return
+      this.pipeline?.dispose()
+      try {
+        this.pipeline = new DefaultRenderingPipeline('defaultPipeline', true, this.scene, [activeCamera])
+      } catch (error) {
+        console.warn('Failed to initialize default rendering pipeline; post-processing disabled.', error)
+        this.pipeline = null
+        return
+      }
+      this.pipeline.samples = render.antialias ? 4 : 1
+      this.pipeline.fxaaEnabled = render.antialias
+      this.pipeline.imageProcessingEnabled = true
+    }
+
+    // Try to set up immediately if a camera is present
+    setupPipeline()
+
+    // Recreate when scenes change (camera likely changes)
+    this.events.subscribe('scene:activated', () => setupPipeline())
 
     this.events.subscribe('render:toggleShadows', () => {
       if (!this.pipeline) {

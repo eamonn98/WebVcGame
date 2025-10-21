@@ -34,7 +34,7 @@ export class AppConfig {
    */
   public static defaults(): AppConfiguration {
     return {
-      initialScene: 'title',
+      initialScene: 'overworld',
       render: {
         pixelRatio: Math.min(window.devicePixelRatio ?? 1, 2),
         enableWebGPU: true,
