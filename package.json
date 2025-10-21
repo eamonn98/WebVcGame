@@ -6,19 +6,29 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint --config eslint.config.js \"src/**/*.{ts,tsx}\"",
+    "test": "bun test",
+    "test:watch": "bun test --watch"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.46.1",
+    "@vitejs/plugin-vue": "^5.1.4",
     "eslint": "^9.38.0",
     "prettier": "^3.6.2",
+    "sass": "^1.82.0",
     "typescript": "~5.9.3",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vue-tsc": "^2.1.10"
   },
   "dependencies": {
     "@babylonjs/core": "^8.32.1",
     "@babylonjs/gui": "^8.32.1",
-    "@babylonjs/inspector": "^8.32.1"
+    "@babylonjs/inspector": "^8.32.1",
+    "@mdi/font": "^7.4.47",
+    "vue": "^3.5.12",
+    "vuetify": "^3.7.2"
   }
 }
